@@ -1,13 +1,14 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { Module } from '@nestjs/common'
+import { AppController } from './app.controller'
+import { AppService } from './app.service'
 
-import { FoodModule } from './delivery_zone/food.module';
-import { DrizzleModule } from './drizzle/drizzle.module';
+import { FoodModule } from './delivery_zone/food.module'
+import { PrismaModule } from './prisma/prisma.module'
+import { PrismaService } from './prisma/prisma.service'
 
 @Module({
-  imports: [FoodModule, DrizzleModule],
-  controllers: [AppController],
-  providers: [AppService],
+	imports: [FoodModule, PrismaModule],
+	controllers: [AppController],
+	providers: [AppService, PrismaService]
 })
 export class AppModule {}

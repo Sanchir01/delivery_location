@@ -7,7 +7,7 @@ export class FoodController {
 
 	@Get()
 	getAllZone() {
-		return 'all zone'
+		return this.foodService.getAllDeliveryZone()
 	}
 
 	@Post()
