@@ -1,6 +1,6 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common'
 import { PrismaService } from 'src/prisma/prisma.service'
-import { CreateDeliveryZoneDto } from './dto/createDeliveryZone.dto'
+import { CreateDeliveryZoneDto, DeliveryCoordinate } from './dto/createDeliveryZone.dto'
 
 @Injectable()
 export class FoodService {
@@ -19,12 +19,18 @@ export class FoodService {
 		if (isExistzoneByName === undefined) {
 			throw new UnprocessableEntityException('Delivery zone already exist')
 		}
-
+		const polygonWKT = this.convertToWKT(polygon);
 		const newZone = await this.prisma.$queryRaw`
-      INSERT INTO "DeliveryZone" (title, polygon) 
-      VALUES (${title}, Polygon(${polygon}, 4326)) 
-      RETURNING id, title, ST_AsText(polygon)
-    `;
-		return
+        INSERT INTO "DeliveryZone" (title, polygon)
+        VALUES (${title}, ST_GeomFromText(${polygonWKT}, 4326))
+            RETURNING id, title, ST_AsText(polygon) as polygon;
+		`
+		return newZone
+	}
+	private  convertToWKT(coordinates: DeliveryCoordinate[] ): string {
+		const coordString = coordinates
+			.map(coord => `${coord.longitude} ${coord.latitude}`)
+			.join(', ');
+		return `POLYGON((${coordString}))`;
 	}
 }

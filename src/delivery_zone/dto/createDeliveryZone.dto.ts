@@ -6,10 +6,10 @@ export class CreateDeliveryZoneDto {
 	@MaxLength(30, { message: 'Должно быть максимум 30 симоволов в имени' })
 	title: string
 
-	polygon: DeliveryCoordinate
+	polygon: DeliveryCoordinate[]
 }
 
-class DeliveryCoordinate {
+export class DeliveryCoordinate {
 	@IsNotEmpty()
 	longitude: Float32Array
 	@IsNotEmpty()
