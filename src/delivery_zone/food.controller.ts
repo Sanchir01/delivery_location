@@ -1,17 +1,28 @@
-import { Body, Controller, Get, HttpCode, Post, UsePipes, ValidationPipe } from '@nestjs/common'
-import { FoodService } from './food.service'
+import {
+	Body,
+	Controller,
+	Get,
+	HttpCode,
+	Post,
+	Query,
+	UsePipes,
+	ValidationPipe
+} from '@nestjs/common'
 import { CreateDeliveryZoneDto } from './dto/createDeliveryZone.dto'
+import { IParamPolygon } from './entities/polygon.type'
+import { FoodService } from './food.service'
 
-@Controller('devilery_zones')
+@Controller('devilery-zones')
 export class FoodController {
 	constructor(private readonly foodService: FoodService) {}
 
 	@Get()
-	getAllZone() {
-		return this.foodService.getAllDeliveryZone()
+	getAllZone(@Query() params: IParamPolygon) {
+		console.log('test ID', params)
+		return this.foodService.getAllDeliveryZone(params)
 	}
 
-	@UsePipes(new ValidationPipe)
+	@UsePipes(new ValidationPipe())
 	@HttpCode(200)
 	@Post()
 	createZone(@Body() dto: CreateDeliveryZoneDto) {

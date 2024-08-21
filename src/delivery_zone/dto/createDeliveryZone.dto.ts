@@ -1,4 +1,4 @@
-import {  IsNotEmpty, IsString, MaxLength, MinLength, } from 'class-validator'
+import { IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator'
 
 export class CreateDeliveryZoneDto {
 	@IsString()
@@ -11,7 +11,7 @@ export class CreateDeliveryZoneDto {
 
 export class DeliveryCoordinate {
 	@IsNotEmpty()
-	longitude: Float32Array
+	longitude: number
 	@IsNotEmpty()
-	latitude: Float32Array
+	latitude: number
 }
