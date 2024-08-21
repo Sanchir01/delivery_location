@@ -20,17 +20,3 @@ model DeliveryZone {
   title   String                                  @unique @db.VarChar(30)
   polygon Unsupported("geography(polygon, 4326)")
 }
-
-model PointOfInterest {
-  id       Int    @id @default(autoincrement())
-  name     String
-  location Point  @relation(fields: [pointId], references: [id])
-  pointId  Int
-}
-
-model Point {
-  id              Int               @id @default(autoincrement())
-  latitude        Int
-  longitude       Int
-  PointOfInterest PointOfInterest[]
-}

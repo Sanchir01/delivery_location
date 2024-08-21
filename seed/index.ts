@@ -1,47 +1,10 @@
 import { faker } from '@faker-js/faker'
 import { DeliveryZone, PrismaClient } from '@prisma/client'
 import * as dotenv from 'dotenv'
-import {
-	CreateDeliveryZoneDto,
-	DeliveryCoordinate
-} from 'src/delivery_zone/dto/createDeliveryZone.dto'
+
 dotenv.config()
+
 const prisma = new PrismaClient()
-
-function convertToWKT(coordinates: DeliveryCoordinate[]): string {
-	const coordString = coordinates
-		.map(coord => `${coord.longitude} ${coord.latitude}`)
-		.join(', ')
-	return `POLYGON((${coordString}))`
-}
-
-const generateFakeDeliveryZone = (): CreateDeliveryZoneDto => {
-	return {
-		title: faker.location.streetAddress().substring(0, 30),
-		polygon: [
-			{
-				latitude: faker.location.latitude(),
-				longitude: faker.location.longitude()
-			},
-			{
-				latitude: faker.location.latitude(),
-				longitude: faker.location.longitude()
-			},
-			{
-				latitude: faker.location.latitude(),
-				longitude: faker.location.longitude()
-			},
-			{
-				latitude: faker.location.latitude(),
-				longitude: faker.location.longitude()
-			},
-			{
-				latitude: faker.location.latitude(),
-				longitude: faker.location.longitude()
-			}
-		]
-	}
-}
 
 const createZone = async (quantity: number) => {
 	const zoneArray: DeliveryZone[] = []

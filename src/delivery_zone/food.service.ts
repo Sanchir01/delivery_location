@@ -7,6 +7,7 @@ import { DeliveryCoordinate } from 'src/delivery_zone/dto/createDeliveryZone.dto
 import { PrismaService } from 'src/prisma/prisma.service'
 import { CreateDeliveryZoneDto } from './dto/createDeliveryZone.dto'
 import { IParamPolygon } from './entities/polygon.type'
+import { DeliveryZone } from '@prisma/client'
 
 @Injectable()
 export class FoodService {
@@ -15,14 +16,17 @@ export class FoodService {
 	async getDeliveryZoneByTitle(title: string) {
 		return this.prisma.deliveryZone.findUnique({ where: { title } })
 	}
+	getAllDeliveryZone(){
+		return this.prisma.$queryRaw`SELECT id, title, ST_AsText(polygon) as polygon  FROM "DeliveryZone"`
+ }
 
-	async getAllDeliveryZone(params: IParamPolygon) {
+	async getDeliveryZoneByPoint(params: IParamPolygon) {
 		const point = `POINT(${params.longitude} ${params.latitude})`
-		const zones = await this.prisma.$queryRaw`
+		const zones: DeliveryZone[] = await this.prisma.$queryRaw`
       SELECT id, title, ST_AsText(polygon) as polygon FROM "DeliveryZone"
       WHERE ST_Intersects(polygon, ST_GeomFromText(${point}, 4326));
     `
-		if (!zones) {
+		if (zones.length === 0) {
 			throw new BadRequestException('мы не доставляем в эту зону')
 		}
 		return zones
@@ -35,13 +39,14 @@ export class FoodService {
 			throw new UnprocessableEntityException('Delivery zone already exist')
 		}
 		const polygonWKT = this.convertToWKT(polygon)
+
 		const newZone = await this.prisma.$queryRaw`
         INSERT INTO "DeliveryZone" (title, polygon)
         VALUES (${title}, ST_GeomFromText(${polygonWKT}, 4326))
-            RETURNING id, title, ST_AsText(polygon) as polygon;
-		`
+            RETURNING id, title, ST_AsText(polygon) as polygon;`
 		return newZone
 	}
+	
 	private convertToWKT(
 		coordinates: DeliveryCoordinate[] | IParamPolygon
 	): string {

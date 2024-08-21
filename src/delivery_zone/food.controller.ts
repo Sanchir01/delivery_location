@@ -17,9 +17,14 @@ export class FoodController {
 	constructor(private readonly foodService: FoodService) {}
 
 	@Get()
-	getAllZone(@Query() params: IParamPolygon) {
+	getZoneByPoint(@Query() params: IParamPolygon) {
 		console.log('test ID', params)
-		return this.foodService.getAllDeliveryZone(params)
+		return this.foodService.getDeliveryZoneByPoint(params)
+	}
+
+	@Get("all")
+	getAllZones() {
+		return this.foodService.getAllDeliveryZone()
 	}
 
 	@UsePipes(new ValidationPipe())

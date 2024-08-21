@@ -32,33 +32,48 @@
 $ pnpm install
 ```
 
+## Up db from docker
+
+```bash
+$ pnpm docker:dev
+```
+
+## migrate db and generate prisma
+
+```bash
+$ pnpm migrate
+```
+
+## seed db
+
+```bash
+$ pnpm seed
+```
+
 ## Running the app
 
 ```bash
 # development
-$ pnpm run start
+$ pnpm  start
 
 # watch mode
-$ pnpm run dev
-
-# docker postgis up
-$ pnpm docker:dev
+$ pnpm dev
 
 # production mode
-$ pnpm run start:prod
+$ pnpm start:prod
 ```
 
 ## Test
 
 ```bash
 # unit tests
-$ pnpm run test
+$ pnpm test
 
 # e2e tests
-$ pnpm run test:e2e
+$ pnpm test:e2e
 
 # test coverage
-$ pnpm run test:cov
+$ pnpm test:cov
 ```
 
 ## Support
@@ -67,9 +82,7 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 ## Stay in touch
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- Author - https://t.me/sanchirFront
 
 ## License
 
