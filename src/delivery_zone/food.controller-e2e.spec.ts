@@ -15,11 +15,7 @@ describe('FoodController (e2e)', () => {
 		await app.init()
 	})
 
-	it('/api/devilery-zones/all (GET)', () => {
-		return request(app.getHttpServer())
-			.get('/api/devilery-zones/all')
-			.expect(200)
-	})
+
 
 	it('/api/devilery-zones (POST)', () => {
 		return request(app.getHttpServer())
@@ -43,11 +39,20 @@ describe('FoodController (e2e)', () => {
 				}
 			])
 	})
+	it('/api/devilery-zones/all (GET)', () => {
+		return request(app.getHttpServer())
+			.get('/api/devilery-zones/all')
+			.expect(200).expect(({ body }) => {
+				console.log(body)
+			})
+	})
 
 	it('/api/devilery-zones (GET)', () => {
 		return request(app.getHttpServer())
 			.get('/api/devilery-zones?latitude=40.7648&longitude=-73.9811')
-			.expect(200)
+			.expect(200).expect(({ body }) => {
+				console.log(body)
+			})
 	})
 	afterAll(() => app.close())
 })
