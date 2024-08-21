@@ -4,7 +4,7 @@ import {
 	UnprocessableEntityException
 } from '@nestjs/common'
 import { DeliveryCoordinate } from 'src/delivery_zone/dto/createDeliveryZone.dto'
-import { PrismaService } from 'src/prisma/prisma.service'
+import { PrismaService } from '../prisma/prisma.service'
 import { CreateDeliveryZoneDto } from './dto/createDeliveryZone.dto'
 import { IParamPolygon } from './entities/polygon.type'
 import { DeliveryZone } from '@prisma/client'

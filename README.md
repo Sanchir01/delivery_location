@@ -68,12 +68,6 @@ $ pnpm start:prod
 ```bash
 # unit tests
 $ pnpm test
-
-# e2e tests
-$ pnpm test:e2e
-
-# test coverage
-$ pnpm test:cov
 ```
 
 ## Support
