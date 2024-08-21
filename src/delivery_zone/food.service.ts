@@ -19,14 +19,12 @@ export class FoodService {
 	async getAllDeliveryZone(params: IParamPolygon) {
 		const point = `POINT(${params.longitude} ${params.latitude})`
 		const zones = await this.prisma.$queryRaw`
-      SELECT id, title, ST_AsText(polygon) FROM "DeliveryZone"
+      SELECT id, title, ST_AsText(polygon) as polygon FROM "DeliveryZone"
       WHERE ST_Intersects(polygon, ST_GeomFromText(${point}, 4326));
     `
-
 		if (!zones) {
 			throw new BadRequestException('мы не доставляем в эту зону')
 		}
-
 		return zones
 	}
 
@@ -37,7 +35,6 @@ export class FoodService {
 			throw new UnprocessableEntityException('Delivery zone already exist')
 		}
 		const polygonWKT = this.convertToWKT(polygon)
-
 		const newZone = await this.prisma.$queryRaw`
         INSERT INTO "DeliveryZone" (title, polygon)
         VALUES (${title}, ST_GeomFromText(${polygonWKT}, 4326))

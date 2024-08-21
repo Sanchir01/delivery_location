@@ -46,9 +46,8 @@ const generateFakeDeliveryZone = (): CreateDeliveryZoneDto => {
 const createZone = async (quantity: number) => {
 	const zoneArray: DeliveryZone[] = []
 	for (let i = 0; i < quantity; i++) {
-		const { title, polygon } = generateFakeDeliveryZone()
-		polygon.push(polygon[0])
-		const polygonWKT = convertToWKT(polygon)
+		const title = faker.address.city()
+		const polygonWKT = generateRandomPolygon()
 		const newZone: DeliveryZone = await prisma.$queryRaw`
         INSERT INTO "DeliveryZone" (title, polygon)
         VALUES (${title}, ST_GeomFromText(${polygonWKT}, 4326))
@@ -58,7 +57,23 @@ const createZone = async (quantity: number) => {
 	}
 	console.log(zoneArray)
 }
+function generateRandomPolygon(): string {
+	const centerLat = faker.location.latitude()
+	const centerLong = faker.location.longitude()
+	const radius = 0.01 // радиус в градусах
 
+	const points = Array.from({ length: 5 }, () => {
+		const angle = Math.random() * 2 * Math.PI
+		const lat = centerLat + radius * Math.sin(angle)
+		const long = centerLong + radius * Math.cos(angle)
+		return `${long} ${lat}`
+	})
+
+	// Закрываем полигон, добавляя первый пункт в конец
+	points.push(points[0])
+
+	return `POLYGON((${points.join(', ')}))`
+}
 async function main() {
 	console.log('start seeding')
 	await createZone(5).catch(() => 'errors seeding')
